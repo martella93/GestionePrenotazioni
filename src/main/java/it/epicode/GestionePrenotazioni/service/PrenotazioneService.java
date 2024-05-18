@@ -27,29 +27,38 @@ public class PrenotazioneService {
     public void creaPrenotazione(Postazione postazione, Utente utente, LocalDate data) {
         List<Prenotazione> prenotazioniUtente = prenotazioneRepository.findByUtenteAndData(utente, data);
         if (!prenotazioniUtente.isEmpty()) {
-            throw new IllegalArgumentException("L'utente ha già una prenotazione per questa data.");
+            System.out.println("L'utente ha già una prenotazione per questa data: " + data);
+            return;
         }
-        if (isPostazioneDisponibile(postazione, data)) {
-            throw new IllegalArgumentException("La postazione non è disponibile per la data specificata.");
+
+        if (!isPostazioneDisponibile(postazione, data)) {
+            System.out.println("La postazione non è disponibile per la data specificata: " + data);
+            return;
         }
+
+
         Prenotazione prenotazione = new Prenotazione();
         prenotazione.setPostazione(postazione);
         prenotazione.setUtente(utente);
         prenotazione.setData(data);
         prenotazioneRepository.save(prenotazione);
+        System.out.println("Prenotazione creata con successo per la data: " + data);
     }
+
+
 
     public boolean isPostazioneDisponibile(Postazione postazione, LocalDate dataPrenotazione) {
         List<Prenotazione> prenotazioni = prenotazioneRepository.findByPostazioneAndData(postazione, dataPrenotazione);
 
         if (!prenotazioni.isEmpty()) {
             System.out.println("La postazione non è disponibile per l'intera giornata.");
-            return true;
+            return false;
         }
 
         System.out.println("La postazione è disponibile per l'intera giornata.");
-        return false;
+        return true;
     }
+
 
 
 

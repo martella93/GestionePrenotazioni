@@ -38,20 +38,20 @@ public class Runner implements CommandLineRunner {
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(GestionePrenotazioniApplication.class);
 
-        Edificio edificio = edificioService.creaEdificio("Posta", "via liborio romano","Bari");
-        Edificio edificio1 = edificioService.creaEdificio("Banca", "via dante aligheri","Roma");
-        Edificio edificio2 = edificioService.creaEdificio("Posta", "via san giovanni","Lecce");
-        Edificio edificio3 = edificioService.creaEdificio("Posta", "via della via","Milano");
-        Edificio edificio4 = edificioService.creaEdificio("Banca", "via della spiga","Bari");
-        Edificio edificio5 = edificioService.creaEdificio("Banca", "via marco rossi","Verona");
-
-
-
-        Postazione postazione = postazioneService.creaPostazione("A1", Tipo.PRIVATO,5, edificio);
-        Postazione postazione1 = postazioneService.creaPostazione("A4", Tipo.OPENSPACE,50, edificio1);
-        Postazione postazione2 = postazioneService.creaPostazione("A250", Tipo.SALA_RIUNIONI,20, edificio2);
-        Postazione postazione3 = postazioneService.creaPostazione("A15", Tipo.PRIVATO,10, edificio);
-        Postazione postazione4 = postazioneService.creaPostazione("A65", Tipo.PRIVATO,5, edificio);
+//        Edificio edificio = edificioService.creaEdificio("Posta", "via liborio romano","Bari");
+//        Edificio edificio1 = edificioService.creaEdificio("Banca", "via dante aligheri","Roma");
+//        Edificio edificio2 = edificioService.creaEdificio("Posta", "via san giovanni","Lecce");
+//        Edificio edificio3 = edificioService.creaEdificio("Posta", "via della via","Milano");
+//        Edificio edificio4 = edificioService.creaEdificio("Banca", "via della spiga","Bari");
+//        Edificio edificio5 = edificioService.creaEdificio("Banca", "via marco rossi","Verona");
+//
+//
+//
+//        Postazione postazione = postazioneService.creaPostazione("A1", Tipo.PRIVATO,5, edificio);
+//        Postazione postazione1 = postazioneService.creaPostazione("A4", Tipo.OPENSPACE,50, edificio1);
+//        Postazione postazione2 = postazioneService.creaPostazione("A250", Tipo.SALA_RIUNIONI,20, edificio2);
+//        Postazione postazione3 = postazioneService.creaPostazione("A15", Tipo.PRIVATO,10, edificio);
+//        Postazione postazione4 = postazioneService.creaPostazione("A65", Tipo.PRIVATO,5, edificio);
 
 
         Scanner scanner = new Scanner(System.in);
@@ -167,20 +167,14 @@ public class Runner implements CommandLineRunner {
                     String dataPrenotazioneStr = scanner.nextLine();
                     LocalDate dataPrenotazione = LocalDate.parse(dataPrenotazioneStr);
 
-                    if (!prenotazioneService.isPostazioneDisponibile(postazioneScelta, dataPrenotazione)) {
+                    try {
                         prenotazioneService.creaPrenotazione(postazioneScelta, utente, dataPrenotazione);
-                        System.out.println("Prenotazione effettuata con successo per la data " + dataPrenotazione);
-                    } else {
-                        System.out.println("La postazione non è disponibile per la data specificata.");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
                     }
-                } else {
-                    System.out.println("Il numero della postazione inserito non è valido.");
+
                 }
-            } else {
-                System.out.println("Nessuna postazione disponibile nell'edificio.");
             }
-        } else {
-            System.out.println("L'edificio specificato non esiste nella città selezionata.");
         }
     }
 
